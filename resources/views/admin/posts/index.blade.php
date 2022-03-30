@@ -35,7 +35,13 @@
                     @endif
 
                 </td>
-                <td>TAG</td>
+                <td>
+                    @forelse($post->tags as $tag)
+                    <div>{{$tag->name}}</div>
+                    @empty
+                    -
+                    @endforelse
+                </td>
                 <td>{{ $post->slug }}</td>
                 <td>{{ $post->created_at }}</td>
                 <td class="d-flex align-items-center">
