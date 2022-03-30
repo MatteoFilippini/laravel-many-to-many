@@ -36,6 +36,15 @@
                     @endforeach
                 </select>
             </div>
+            <!-- tags -->
+            <div class="form-group form-check">
+                @foreach ($tags as $tag)
+                <label class="form-check-label mr-5">
+                    <input class="form-check-input mr-1" type="checkbox" value="{{$tag->id}}" name="tags[]">{{$tag->name}}
+                </label>
+                @endforeach
+            </div>
+
             <button type=" submit" class="btn btn-primary">Conferma</button>
             <button type="reset" class="btn btn-danger">Reset</button>
             <a href="{{route('admin.posts.index')}}">Indietro</a>

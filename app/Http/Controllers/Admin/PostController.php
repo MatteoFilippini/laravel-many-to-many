@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\Tag;
 use App\Models\Category;
 use Illuminate\Support\Str;
 
@@ -30,7 +31,8 @@ class PostController extends Controller
     {
         $post = new Post();
         $categories = Category::all();
-        return view('admin.posts.create', compact('post', 'categories'));
+        $tags = Tag::all();
+        return view('admin.posts.create', compact('post', 'categories', 'tags'));
     }
 
     /**
@@ -41,9 +43,14 @@ class PostController extends Controller
      */
     public function store(Request $request, Post $post)
     {
+
+
+        // $post_tag_ids = $data['tags']->pluck('id')->toArray();
+        // dd($request->all());
         $data = $request->all();
         $data['slug'] = Str::slug($request->title, '-');
         $post = Post::create($data);
+        $post->tags()->attach($data['tags']);
         return redirect()->route('admin.posts.index')->with('message', 'Hai creato un nuovo post')->with('type', 'success');
     }
 
