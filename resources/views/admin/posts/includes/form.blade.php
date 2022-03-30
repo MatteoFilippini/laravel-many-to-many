@@ -66,7 +66,6 @@
                 @foreach ($tags as $tag)
                 <label class="form-check-label mr-5">
                     <input class="form-check-input mr-1" type="checkbox" value="{{$tag->id}}" name="tags[]" @if (in_array($tag->id,old('tags',$post_tag_ids ?? []))) checked @endif>{{$tag->name}}
-
                 </label>
                 @endforeach
             </div>

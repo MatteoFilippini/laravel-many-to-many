@@ -56,7 +56,7 @@ class PostController extends Controller
         $data = $request->all();
         $data['slug'] = Str::slug($request->title, '-');
         $post = Post::create($data);
-        $post->tags()->attach($data['tags']);
+        if (array_key_exists('tags', $data)) $post->tags()->attach($data['tags']);
         return redirect()->route('admin.posts.index')->with('message', 'Hai creato un nuovo post')->with('type', 'success');
     }
 
@@ -95,10 +95,21 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        // dd($request->all());
+        $request->validate([
+            'title' => ['string', 'max:50', 'min:5', 'required', Rule::unique('posts')->ignore($post->id)],
+            'content' => 'string|min:10|required',
+            'image' => 'url|nullable',
+            'category_id' => 'nullable|exists:posts,category_id',
+            'tags' => 'nullable|exists:tags,id'
+        ]);
+
         $data = $request->all();
         $data['slug'] = Str::slug($request->title, '-');
         $post->update($data);
-        $post->tags()->sync($data['tags']);
+        if (!array_key_exists('tags', $data)) $post->tags()->detach();
+        else  $post->tags()->sync($data['tags']);
+
         return redirect()->route('admin.posts.show', $post)->with('message', 'Hai modificato questo post')->with('type', 'success');
     }
 
