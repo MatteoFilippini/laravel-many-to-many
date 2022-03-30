@@ -19,7 +19,8 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::all();
-        return view('admin.posts/index', compact('posts'));
+        $tags = Tag::all();
+        return view('admin.posts/index', compact('posts', 'tags'));
     }
 
     /**
@@ -75,7 +76,9 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $categories = Category::all();
-        return view('admin.posts.edit', compact('post', 'categories'));
+        $tags = Tag::all();
+        $post_tag_ids = $post->tags->pluck('id')->toArray();
+        return view('admin.posts.edit', compact('post', 'categories', 'tags', 'post_tag_ids'));
     }
 
     /**
@@ -90,6 +93,7 @@ class PostController extends Controller
         $data = $request->all();
         $data['slug'] = Str::slug($request->title, '-');
         $post->update($data);
+        $post->tags()->sync($data['tags']);
         return redirect()->route('admin.posts.show', $post)->with('message', 'Hai modificato questo post')->with('type', 'success');
     }
 

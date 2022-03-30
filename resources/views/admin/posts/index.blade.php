@@ -11,6 +11,9 @@
         {{ session('message') }}
     </div>
     @endif
+    @foreach($tags as $tag)
+    {{$tag->name}}:{{count($tag->posts)}}
+    @endforeach
     <table class="table">
         <thead>
             <tr>
