@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Models\Tag;
 use App\Models\Category;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class PostController extends Controller
 {
@@ -44,10 +45,14 @@ class PostController extends Controller
      */
     public function store(Request $request, Post $post)
     {
+        $request->validate([
+            'title' => ['string', 'max:50', 'min:5', 'required', Rule::unique('posts')->ignore($post->id)],
+            'content' => 'string|min:10|required',
+            'image' => 'url|nullable',
+            'category_id' => 'nullable|exists:posts,category_id',
+            'tags' => 'nullable|exists:tags,id'
+        ]);
 
-
-        // $post_tag_ids = $data['tags']->pluck('id')->toArray();
-        // dd($request->all());
         $data = $request->all();
         $data['slug'] = Str::slug($request->title, '-');
         $post = Post::create($data);
