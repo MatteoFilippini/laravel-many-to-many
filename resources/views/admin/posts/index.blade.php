@@ -17,7 +17,7 @@
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">#</th>
+                <th scope="col">ddddddddddddddd</th>
                 <th scope="col">Titolo</th>
                 <th scope="col">Categoria</th>
                 <th scope="col">Tags</th>
